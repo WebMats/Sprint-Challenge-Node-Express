@@ -1,5 +1,18 @@
 import React, { Component } from 'react'
+import styled from 'styled-components';
 
+const ProjectList = styled.ol`
+    width: fit-content;
+    padding: 0 10px;
+    margin: 1rem auto 0 auto;
+    li {
+        list-style: decimal;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 1rem 0;
+        text-align: left;
+    }
+`
 
 class ProjectsPage extends Component {
     state = {
@@ -22,9 +35,13 @@ class ProjectsPage extends Component {
     }
   render() {
     return (
-      <ul>
-          {this.state.projects.map(proj => <li key={proj.id} onClick={this.navigateToProjectDetails.bind(this, proj.id)}>{proj.name}</li>)}
-      </ul>
+    <React.Fragment>
+        <h1>Click on project for more details</h1>
+        <ProjectList>
+            {this.state.projects.map(proj => <li key={proj.id} onClick={this.navigateToProjectDetails.bind(this, proj.id)}>{proj.name}</li>)}
+        </ProjectList>
+    </React.Fragment>
+      
     )
   }
 }
