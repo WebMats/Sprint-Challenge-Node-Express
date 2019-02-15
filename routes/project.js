@@ -75,8 +75,22 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 router.put('/:id', async (req, res, next) => {
+    const id = req.params.id;
+    const { name, description, completed } = req.body;
+    const updatedProject = { name, description, completed };
+    const trimmedUpdatedProject = {};
+    for (let key in updatedProject) {
+        if (updatedProject[key] !== undefined) {
+            trimmedUpdatedProject[key] = updatedProject[key]
+        }
+    }
     try {
-
+        projectDB.update(id, trimmedUpdatedProject).then((result) => {
+            res.status(201).json(result)
+        }).catch((err) => {
+            console.log(err)
+            res.status(500).json({errorMessage: "Could not update action."})
+        });
     } catch(err) {
         console.log(err)
         throw err;

@@ -74,9 +74,23 @@ router.delete('/:id', async (req, res, next) => {
         throw err;
     }
 })
-router.put('', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
+    const id = req.params.id;
+    const { project_id, description, notes, completed } = req.body;
+    const updatedAction = { project_id, description, notes, completed };
+    const trimmedUpdatedAction = {};
+    for (let key in updatedAction) {
+        if (updatedAction[key] !== undefined) {
+            trimmedUpdatedAction[key] = updatedAction[key]
+        }
+    }
     try {
-
+        actionDB.update(id, trimmedUpdatedAction).then((result) => {
+            res.status(201).json(result)
+        }).catch((err) => {
+            console.log(err)
+            res.status(500).json({errorMessage: "Could not update action."})
+        });
     } catch(err) {
         console.log(err)
         throw err;
