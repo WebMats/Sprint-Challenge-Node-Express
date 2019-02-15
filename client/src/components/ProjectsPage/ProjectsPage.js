@@ -17,10 +17,13 @@ class ProjectsPage extends Component {
             throw err;
         });
     }
+    navigateToProjectDetails(projectId) {
+        this.props.history.push(`${this.props.match.path}/${projectId}`)
+    }
   render() {
     return (
       <ul>
-          {this.state.projects.map(proj => <li key={proj.id}>{proj.name}</li>)}
+          {this.state.projects.map(proj => <li key={proj.id} onClick={this.navigateToProjectDetails.bind(this, proj.id)}>{proj.name}</li>)}
       </ul>
     )
   }
