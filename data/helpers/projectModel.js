@@ -9,11 +9,12 @@ module.exports = {
       query.where('p.id', id).first();
 
       const promises = [query, this.getProjectActions(id)]; // [ projects, actions ]
-
       return Promise.all(promises).then(function(results) {
         let [project, actions] = results;
+        if (!project) {
+          return project
+        }
         project.actions = actions;
-
         return mappers.projectToBody(project);
       });
     }
