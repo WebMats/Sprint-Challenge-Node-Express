@@ -46,7 +46,7 @@ router.post('', async (req, res, next) => {
     try {
         const completed = req.body.completed ? req.body.completed : false;
         projectDB.insert({name, description, completed}).then((result) => {
-            res.status(200).json(result)
+            res.status(201).json(result)
         }).catch((err) => {
             console.log(err)
             res.status(500).json({errorMessage: "Could not create new project."})
@@ -57,8 +57,18 @@ router.post('', async (req, res, next) => {
     }
 })
 router.delete('/:id', async (req, res, next) => {
+    const id = req.params.id
     try {
-
+        projectDB.remove(id).then((result) => {
+            if (result < 1) {
+                res.status(404).json({errorMessage: "The project with that id either does not exist or could not be deleted."})
+            } else {
+                res.status(200).json({message: "Deletion request was successful"})
+            }
+        }).catch((err) => {
+            console.log(err)
+            res.status(500).json({errorMessage: "Could not delete project"})
+        });
     } catch(err) {
         console.log(err)
         throw err;
