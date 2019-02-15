@@ -39,6 +39,24 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 router.post('', async (req, res, next) => {
+    const { name, description} = req.body;
+    if (!name || !description) { 
+        return res.status(500).json({errorMessage: "Please provide both name and description"})
+    }
+    try {
+        const completed = req.body.completed ? req.body.completed : false;
+        projectDB.insert({name, description, completed}).then((result) => {
+            res.status(200).json(result)
+        }).catch((err) => {
+            console.log(err)
+            res.status(500).json({errorMessage: "Could not create new project."})
+        });
+    } catch(err) {
+        console.log(err)
+        throw err;
+    }
+})
+router.delete('/:id', async (req, res, next) => {
     try {
 
     } catch(err) {
@@ -46,15 +64,7 @@ router.post('', async (req, res, next) => {
         throw err;
     }
 })
-router.delete('', async (req, res, next) => {
-    try {
-
-    } catch(err) {
-        console.log(err)
-        throw err;
-    }
-})
-router.put('', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
     try {
 
     } catch(err) {

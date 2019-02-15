@@ -39,8 +39,18 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 router.post('', async (req, res, next) => {
+    const { project_id, description, notes } = req.body;
+    if (!project_id || !description || description.length > 128 || !notes) {
+        return res.status(500).json({errorMessage: "Please provide a project_id, notes and a description that is less than 128 characters. "})
+    }
     try {
-
+        const completed = req.body.completed ? req.body.completed : false;
+        actionDB.insert({project_id, description, notes, completed}).then((result) => {
+            res.status(200).json(result)
+        }).catch((err) => {
+            console.log(err)
+            res.status(500).json({errorMessage: "Could not create new action."})
+        });
     } catch(err) {
         console.log(err)
         throw err;
